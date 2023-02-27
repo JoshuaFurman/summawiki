@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Wikipedia Preview",
+  "version": "1.0",
+  "description": "Displays a preview of Wikipedia pages when hovering over links.",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "excludes_matches": ["*://en.wikipedia.org/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
