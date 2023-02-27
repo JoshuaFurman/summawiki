@@ -2,11 +2,41 @@ const popup = document.createElement("div");
 popup.style.cssText = `
   position: absolute;
   z-index: 9999;
-  background-color: white;
-  border: 1px solid black;
-  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
+  line-height: 1.5;
+  max-width: 400px;
+  padding: 16px;
+  text-align: left;
 `;
+
+const title = document.createElement("h2");
+title.style.cssText = `
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const summary = document.createElement("p");
+summary.style.cssText = `
+  color: #666;
+`;
+
+const readMoreLink = document.createElement("a");
+readMoreLink.style.cssText = `
+  color: #0072c6;
+  display: block;
+  margin-top: 16px;
+`;
+
+popup.appendChild(title);
+popup.appendChild(summary);
+popup.appendChild(readMoreLink);
 
 document.addEventListener("mouseover", (e) => {
   if (
@@ -17,11 +47,10 @@ document.addEventListener("mouseover", (e) => {
     fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`)
       .then((response) => response.json())
       .then((data) => {
-        popup.innerHTML = `
-          <h3>${data.title}</h3>
-          <p>${data.extract}</p>
-          <a href="${data.content_urls.desktop.page}" target="_blank">Read more</a>
-        `;
+        title.innerText = data.title;
+        summary.innerText = data.extract;
+        readMoreLink.innerText = "Read more on Wikipedia";
+        readMoreLink.href = data.content_urls.desktop.page;
         popup.style.top = `${e.pageY}px`;
         popup.style.left = `${e.pageX}px`;
         document.body.appendChild(popup);
