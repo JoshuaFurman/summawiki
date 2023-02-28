@@ -11,7 +11,7 @@ popup.style.cssText = `
   line-height: 1.5;
   max-width: 400px;
   padding: 16px;
-  text-align: left;
+  text-align: center;
   display: none; /* hide the popup by default */
 `;
 
@@ -21,6 +21,12 @@ title.style.cssText = `
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
+`;
+
+const thumbnail = document.createElement("img");
+thumbnail.style.cssText = `
+  max-width: 80%;
+  margin-bottom: 16px;
 `;
 
 const summary = document.createElement("p");
@@ -36,6 +42,7 @@ readMoreLink.style.cssText = `
 `;
 
 popup.appendChild(title);
+popup.appendChild(thumbnail);
 popup.appendChild(summary);
 popup.appendChild(readMoreLink);
 document.body.appendChild(popup); /* add the popup to the document */
@@ -52,6 +59,9 @@ document.addEventListener("mouseover", (e) => {
       .then((data) => {
         title.innerText = data.title;
         summary.innerText = data.extract;
+        thumbnail.src =
+          data.thumbnail?.source; /* use optional chaining to handle case where thumbnail is not provided */
+        thumbnail.alt = data.title;
         readMoreLink.innerText = "Read more on Wikipedia";
         readMoreLink.href = data.content_urls.desktop.page;
         popup.style.top = `${e.pageY}px`;
@@ -74,7 +84,8 @@ document.addEventListener("mousemove", (e) => {
     e.target.tagName !== "DIV" /* ignore mousemove events over the popup */ &&
     e.target.tagName !== "H2" &&
     e.target.tagName !== "P" &&
-    e.target.tagName !== "A"
+    e.target.tagName !== "A" &&
+    e.target.tagName !== "IMG"
   ) {
     popup.style.top = `${e.pageY}px`;
     popup.style.left = `${e.pageX}px`;
