@@ -12,6 +12,7 @@ popup.style.cssText = `
   max-width: 400px;
   padding: 16px;
   text-align: left;
+  display: none; /* hide the popup by default */
 `;
 
 const title = document.createElement("h2");
@@ -37,11 +38,13 @@ readMoreLink.style.cssText = `
 popup.appendChild(title);
 popup.appendChild(summary);
 popup.appendChild(readMoreLink);
+document.body.appendChild(popup); /* add the popup to the document */
 
 document.addEventListener("mouseover", (e) => {
   if (
     e.target.tagName === "A" &&
-    e.target.href.startsWith("https://en.wikipedia.org/wiki/")
+    e.target.href.startsWith("https://en.wikipedia.org/wiki/") &&
+    !popup.contains(e.target) /* check if the link is not inside the popup */
   ) {
     const pageTitle = e.target.href.split("/").slice(-1)[0];
     fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`)
@@ -53,7 +56,7 @@ document.addEventListener("mouseover", (e) => {
         readMoreLink.href = data.content_urls.desktop.page;
         popup.style.top = `${e.pageY}px`;
         popup.style.left = `${e.pageX}px`;
-        document.body.appendChild(popup);
+        popup.style.display = "block"; /* show the popup */
       })
       .catch((error) => {
         console.error(error);
@@ -61,11 +64,19 @@ document.addEventListener("mouseover", (e) => {
   }
 });
 
-document.addEventListener("mouseout", (e) => {
+popup.addEventListener("mouseleave", (e) => {
+  popup.style.display = "none"; /* hide the popup when the mouse leaves it */
+});
+
+document.addEventListener("mousemove", (e) => {
   if (
-    e.target.tagName === "A" &&
-    e.target.href.startsWith("https://en.wikipedia.org/wiki/")
+    popup.style.display === "block" /* only move the popup if it's visible */ &&
+    e.target.tagName !== "DIV" /* ignore mousemove events over the popup */ &&
+    e.target.tagName !== "H2" &&
+    e.target.tagName !== "P" &&
+    e.target.tagName !== "A"
   ) {
-    document.body.removeChild(popup);
+    popup.style.top = `${e.pageY}px`;
+    popup.style.left = `${e.pageX}px`;
   }
 });
