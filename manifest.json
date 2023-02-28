@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Wikipedia Link Preview",
+  "name": "SummaWiki",
   "version": "1.0",
   "description": "Displays a preview of Wikipedia pages when you hover over their links.",
   "content_scripts": [
