@@ -76,6 +76,10 @@ const cache = new Map();
  * Position the popup within viewport bounds
  */
 function positionPopup(x, y) {
+  // Temporarily show popup (invisible) to get accurate dimensions
+  popup.style.visibility = "hidden";
+  popup.style.display = "block";
+
   const popupRect = popup.getBoundingClientRect();
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
@@ -102,6 +106,7 @@ function positionPopup(x, y) {
 
   popup.style.left = `${left}px`;
   popup.style.top = `${top}px`;
+  popup.style.visibility = "visible";
 }
 
 /**
@@ -133,7 +138,6 @@ function showPopup(data, x, y) {
   }
   readMoreLink.innerText = "Read more on Wikipedia";
 
-  popup.style.display = "block";
   positionPopup(x, y);
 }
 
@@ -146,7 +150,6 @@ function showError(message, x, y) {
   thumbnail.style.display = "none";
   readMoreLink.style.display = "none";
 
-  popup.style.display = "block";
   positionPopup(x, y);
 }
 
