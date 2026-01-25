@@ -1,8 +1,13 @@
 {
   "manifest_version": 3,
   "name": "SummaWiki",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Displays a preview of Wikipedia pages when you hover over their links.",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -11,5 +16,7 @@
       "exclude_matches": ["*://*.wikipedia.org/*"]
     }
   ],
-  "permissions": ["activeTab", "scripting", "tabs"]
+  "host_permissions": [
+    "*://*.wikipedia.org/*"
+  ]
 }
