@@ -32,7 +32,7 @@ thumbnail.className = "summawiki-thumbnail";
 thumbnail.style.cssText = `
   max-width: 80%;
   max-height: 200px;
-  margin-bottom: 16px;
+  margin: 0 auto 16px auto;
   display: none;
 `;
 
