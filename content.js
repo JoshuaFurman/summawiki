@@ -175,8 +175,10 @@ function showError(message, x, y) {
 function hidePopup() {
   popup.style.display = "none";
   currentLink = null;
-  if (currentRequest) {
-    currentRequest = null;
+  currentRequest = null;
+  if (currentAbortController) {
+    currentAbortController.abort();
+    currentAbortController = null;
   }
 }
 
