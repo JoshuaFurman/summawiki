@@ -13,7 +13,7 @@ popup.style.cssText = `
   line-height: 1.5;
   max-width: 400px;
   padding: 16px;
-  text-align: center;
+  text-align: left;
   display: none;
   box-sizing: border-box;
 `;
