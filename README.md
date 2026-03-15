@@ -50,6 +50,16 @@ This extension:
 
 ## Version History
 
+### 1.2
+- Fixed double-encoding bug that broke previews for articles with special characters
+- Fixed URL fragments and query params being included in API requests
+- Added support for mobile Wikipedia URLs (en.m.wikipedia.org)
+- Improved popup text alignment for better readability
+- Fixed popup positioning to track cursor during debounce delay
+- Added cache size limit to prevent memory leaks on long sessions
+- Added loading indicator while fetching previews
+- Added fetch cancellation for stale requests
+
 ### 1.1
 - Added support for all Wikipedia languages (not just English)
 - Fixed thumbnail display issues

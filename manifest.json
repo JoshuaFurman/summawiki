@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SummaWiki",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Displays a preview of Wikipedia pages when you hover over their links.",
   "icons": {
     "16": "icon16.png",
