@@ -61,7 +61,7 @@ popup.appendChild(readMoreLink);
 document.body.appendChild(popup);
 
 // Regex to match any Wikipedia language subdomain
-const wikipediaRegex = /^https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([^#?]+)/i;
+const wikipediaRegex = /^https?:\/\/([a-z]{2,3})\.m?\.?wikipedia\.org\/wiki\/([^#?]+)/i;
 
 // State management
 let currentLink = null;
