@@ -73,6 +73,7 @@ let lastMouseY = 0;
 
 // Cache for API responses
 const cache = new Map();
+const MAX_CACHE_SIZE = 100;
 
 /**
  * Position the popup within viewport bounds
@@ -186,6 +187,11 @@ async function fetchWikipediaSummary(lang, pageTitle, originalUrl) {
 
   const data = await response.json();
   data.originalUrl = originalUrl;
+
+  // Evict oldest entry if cache is full
+  if (cache.size >= MAX_CACHE_SIZE) {
+    cache.delete(cache.keys().next().value);
+  }
 
   // Cache the result
   cache.set(cacheKey, data);
