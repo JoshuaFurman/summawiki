@@ -68,6 +68,8 @@ let currentLink = null;
 let hideTimeout = null;
 let hoverTimeout = null;
 let currentRequest = null;
+let lastMouseX = 0;
+let lastMouseY = 0;
 
 // Cache for API responses
 const cache = new Map();
@@ -220,6 +222,8 @@ function handleLinkHover(e) {
   }
 
   currentLink = link;
+  lastMouseX = e.pageX;
+  lastMouseY = e.pageY;
 
   hoverTimeout = setTimeout(async () => {
     // Check if we're still hovering the same link
@@ -238,12 +242,12 @@ function handleLinkHover(e) {
         return;
       }
 
-      showPopup(data, e.pageX, e.pageY);
+      showPopup(data, lastMouseX, lastMouseY);
     } catch (error) {
       console.error("SummaWiki: Failed to fetch Wikipedia summary", error);
 
       if (currentRequest === requestId) {
-        showError("Could not load preview.", e.pageX, e.pageY);
+        showError("Could not load preview.", lastMouseX, lastMouseY);
       }
     }
   }, 200);
@@ -291,6 +295,12 @@ function handlePopupLeave() {
 
 // Event listeners
 document.addEventListener("mouseover", handleLinkHover);
+document.addEventListener("mousemove", (e) => {
+  if (currentLink) {
+    lastMouseX = e.pageX;
+    lastMouseY = e.pageY;
+  }
+});
 document.addEventListener("mouseout", handleLinkLeave);
 popup.addEventListener("mouseenter", handlePopupEnter);
 popup.addEventListener("mouseleave", handlePopupLeave);
