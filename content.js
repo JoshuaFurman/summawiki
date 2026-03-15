@@ -68,6 +68,7 @@ let currentLink = null;
 let hideTimeout = null;
 let hoverTimeout = null;
 let currentRequest = null;
+let currentAbortController = null;
 let lastMouseX = 0;
 let lastMouseY = 0;
 
@@ -182,7 +183,7 @@ function hidePopup() {
 /**
  * Fetch Wikipedia summary with caching
  */
-async function fetchWikipediaSummary(lang, pageTitle, originalUrl) {
+async function fetchWikipediaSummary(lang, pageTitle, originalUrl, signal) {
   const cacheKey = `${lang}:${pageTitle}`;
 
   if (cache.has(cacheKey)) {
@@ -191,7 +192,7 @@ async function fetchWikipediaSummary(lang, pageTitle, originalUrl) {
 
   const apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`;
 
-  const response = await fetch(apiUrl);
+  const response = await fetch(apiUrl, { signal });
 
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
@@ -252,6 +253,12 @@ function handleLinkHover(e) {
     const requestId = Symbol();
     currentRequest = requestId;
 
+    // Abort any in-flight request
+    if (currentAbortController) {
+      currentAbortController.abort();
+    }
+    currentAbortController = new AbortController();
+
     // Show loading state if not already cached
     const cacheKey = `${lang}:${pageTitle}`;
     if (!cache.has(cacheKey)) {
@@ -259,7 +266,7 @@ function handleLinkHover(e) {
     }
 
     try {
-      const data = await fetchWikipediaSummary(lang, pageTitle, link.href);
+      const data = await fetchWikipediaSummary(lang, pageTitle, link.href, currentAbortController.signal);
 
       // Check if this request is still relevant
       if (currentRequest !== requestId) {
@@ -268,6 +275,7 @@ function handleLinkHover(e) {
 
       showPopup(data, lastMouseX, lastMouseY);
     } catch (error) {
+      if (error.name === "AbortError") return;
       console.error("SummaWiki: Failed to fetch Wikipedia summary", error);
 
       if (currentRequest === requestId) {
