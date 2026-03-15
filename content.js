@@ -174,7 +174,7 @@ async function fetchWikipediaSummary(lang, pageTitle, originalUrl) {
     return cache.get(cacheKey);
   }
 
-  const apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`;
+  const apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`;
 
   const response = await fetch(apiUrl);
 
