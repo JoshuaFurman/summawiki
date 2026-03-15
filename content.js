@@ -145,6 +145,18 @@ function showPopup(data, x, y) {
 }
 
 /**
+ * Show loading state in popup
+ */
+function showLoading(x, y) {
+  title.innerText = "Loading...";
+  summary.innerText = "";
+  thumbnail.style.display = "none";
+  readMoreLink.style.display = "none";
+
+  positionPopup(x, y);
+}
+
+/**
  * Show error state in popup
  */
 function showError(message, x, y) {
@@ -239,6 +251,12 @@ function handleLinkHover(e) {
 
     const requestId = Symbol();
     currentRequest = requestId;
+
+    // Show loading state if not already cached
+    const cacheKey = `${lang}:${pageTitle}`;
+    if (!cache.has(cacheKey)) {
+      showLoading(lastMouseX, lastMouseY);
+    }
 
     try {
       const data = await fetchWikipediaSummary(lang, pageTitle, link.href);
